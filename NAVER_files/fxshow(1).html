@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<!-- saved from url=(0055)https://nv.veta.naver.com/fxshow?su=SU10078&nrefreshx=0 -->
+<html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title>NAVER</title>
+    <link rel="stylesheet" type="text/css" href="./common.min.css">
+    <style type="text/css">
+        /* DA Alternative - Contents Style */
+        /* DA Alternative - Contents Style */
+        #addiv{position:relative}
+        #addiv embed,#addiv object{z-index:20}
+        #addiv #da_alt{position:absolute;top:0;left:0;width:100%;height:100%;z-index:-1}
+        #addiv #da_alt.on{z-index:30}
+        #addiv #da_alt a{display:block;overflow:hidden;position:absolute;bottom:0;left:0;width:100%;height:100%}
+        #addiv #da_alt .guide{visibility:hidden;position:absolute;top:50%;left:50%;width:154px;height:58px;margin:-29px 0 0 -77px;background:url(https://ssl.pstatic.net/tveta/libs/res/www/common/info/da_access.png)}
+        #addiv #da_alt.on .guide{visibility:visible}
+    </style>
+<script type="text/javascript" src="./jquery-1.8.0.min.js.다운로드"></script><script type="text/javascript" src="./CSSPlugin.min.js.다운로드"></script><script type="text/javascript" src="./EasePack.min.js.다운로드"></script><script type="text/javascript" src="./TweenLite.min.js.다운로드"></script><script type="text/javascript" src="./rollingboard_firstview_332.min.js.다운로드"></script></head>
+<body onload="lazyLoading()" marginwidth="0" marginheight="0">
+<div id="addiv"></div>
+<script type="text/template" id="basicPlayerTmpl">
+    <div class="firstview_wrapper" data-role="firstviewWrapper">
+        <div class="firstview_before" data-role="beforeWrapper">
+            <a class="firstview_before_link" href="{{beforeImgLink}}" aria-label="광고 링크" target="_blank">
+                <img class="firstview_before_img" src="{{beforeImgSrc}}" height="300" width="332" alt="{{beforeImgAlt}}" tabindex="0" draggable="false">
+                <img class="firstview_obj_01" data-role="firstviewObj01" src="{{firstViewImg01Src}}" width="332" height="300" alt="">
+                <img class="firstview_obj_02" data-role="firstviewObj02" src="{{firstViewImg02Src}}" width="332" height="300" alt="">
+                <img class="firstview_obj_03" data-role="firstviewObj03" src="{{firstViewImg03Src}}" width="332" height="300" alt="">
+            </a>
+            <div class="sprite firstview_floating_bg" aria-hidden="true" role="presentation"></div>
+            <div class="firstview_btn_close" data-role="btnClose" role="button" aria-label="광고 닫기" tabindex="0"></div>
+        </div>
+        <div class="firstview_after" data-role="afterWrapper">
+            <a class="firstview_after_link" id="firstview_after_link" href="{{firstviewAfterLink}}" data-role="firstviewAfterLink" aria-label="광고 링크" target="_blank">
+                <div class="firstview_after_img_wrap">
+                    <img class="firstview_after_img" src="{{afterImgSrc}}" width="332" height="150" alt="{{afterImgAlt}}" draggable="false">
+                </div>
+                <img class="firstview_after_obj" data-role="firstviewAfterObj" src="{{afterObjsrc}}" width="120" height="80" alt="" draggable="false">
+                <div class="sprite firstview_text_ballon" data-role="ballonWrapper" role="dialog" aria-label="광고 크게보기" aria-haspopup="true">
+                    <div class="firstview_ballon_content_client" data-role="ballonContent1" role="alert" tabindex="0">
+                        <span class="content_plain">{{ballonText1}}</span>
+                        <span class="content_plain">{{ballonText2}}</span>
+                    </div>
+                    <div class="firstview_ballon_content_fixed" data-role="ballonContent2" role="alert" tabindex="0" draggable="false">
+                        <em class="content_emphasize">마우스를 올려</em>
+                        <span class="content_plain">확인하세요!</span>
+                    </div>
+                </div>
+                <div class="firstview_gauge_wrapper" id="firstview_gauge_wrapper" data-role="gaugeWrapper" style="display:none;">
+                    <div class="firstview_gauge_animation" data-role="gaugeAnimation" id="firstview_gauge_animation" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuetext="광고 로딩중" aria-busy="false"></div>
+                </div>
+            </a>
+            <div class="sprite firstview_btn_replay" data-role="btnReplay" role="button" aria-label="광고 다시보기" tabindex="0"></div>
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="expansionPlayerTmpl">
+    <div class="firstview_after_wrapper">
+        <a href="{{expansionBgLink}}" class="fv_bg_wrapper" target="_blank" aria-label="광고 링크">
+            <img class="fv_bg_src" src="{{expansionBgSrc}}" width="1080" height="428" alt="{{expansionBgAlt}}">
+        </a>
+        <div class="fv_btn_close" role="button" aria-label="동영상 광고 닫기" tabindex="0">
+            <i class="fv_ico_close" data-role="expVideoCloseBtn" aria-hidden="true"></i>
+        </div>
+        <a href="{{expansionBgLink}}" class="fv_video_wrapper" target="_blank">
+            <video class="fv_video_src" id="fv_video_src" data-role="expVideo" src="{{expansionVideoSrc}}" poster="{{expansionStillSrc}}"></video>
+        </a>
+        <div class="fv_video_controller">
+                <span class="fv_controller_btn" role="button" aria-controls="fv_video_src" tabindex="0">
+                    <i class="fv_ico_play" data-role="expVideoPlayBtn" aria-label="동영상 재생" style="display:none;"></i>
+                    <i class="fv_ico_pause" data-role="expVideoPauseBtn" aria-label="동영상 일시정지" style="display:block;"></i>
+                </span>
+            <i class="fv_separator" role="separator" aria-hidden="true"></i>
+                <span class="fv_controller_btn" role="button" aria-controls="fv_video_src" tabindex="0">
+                    <i class="fv_ico_sound" data-role="volumeBtn" aria-label="소리 나옴" style="display:block;"></i>
+                </span>
+        </div>
+    </div>
+</script>
+<script type="text/javascript" src="./pc.veta.core.min.js(2).다운로드"></script>
+<script type="text/javascript">
+    try {
+        document.domain = "naver.com";
+    } catch (e) {}
+
+
+    function lazyLoading() {
+        var sImageserver = "https://ssl.pstatic.net/tveta/libs";
+
+        loadScripts([
+            sImageserver + "/external/js/jquery-1.8.0.min.js?20170106",
+            sImageserver + "/external/js/CSSPlugin.min.js?20170106",
+            sImageserver + "/external/js/EasePack.min.js?20170106",
+            sImageserver + "/external/js/TweenLite.min.js?20170106",
+            ":::ENV:::" === "dev" ?
+            sImageserver + "/assets/js/pc/main/rollingboard_firstview_332.js?20180914"
+                    : sImageserver + "/assets/js/pc/main/min/rollingboard_firstview_332.min.js?20180914"
+
+        ], function() {
+            // ACK IMP
+            new Nimp(["https://nv.veta.naver.com/fxview?eu=EU10000119&calp=-&ac=7756350&src=3637618&evtcd=P100&x_ti=995&tb=&oid=&sid1=&sid2=&rk=8c3ac39c39a1e58da8e106f5911a292d&eltts=veW0YbVDkwB%2F%2BncyXok1yw%3D%3D&brs=Y&&eid=V800"]).log(1);
+            initAd();
+        });
+    }
+
+    function loadScripts(urlArr, callback) {
+        var loadingCount = 0;
+        var resourceCnt = urlArr.length;
+
+        for(var i in urlArr) {
+            naver_corp_da.loadScript(urlArr[i], function() {
+                loadingCount++;
+                if(loadingCount === resourceCnt) callback();
+            });
+        }
+    }
+
+    function initAd() {
+        var info = {
+            cssSrc: ":::ENV:::" === "dev" ?
+                    "https://ssl.pstatic.net/tveta/libs/assets/css/pc/main/rollingboard_firstview_332.css?20180124"
+                    : "https://ssl.pstatic.net/tveta/libs/assets/css/pc/main/min/rollingboard_firstview_332.min.css?20180124",
+            adInfoImgSrc: "https://ssl.pstatic.net/tveta/libs/res/www/common/info/da_access.png",
+            basicPlayer: {
+                creativeData: {
+                    beforeImgSrc: "https://ssl.pstatic.net/tveta/libs/1218/1218041/4f927ceb31aa9c4c84b8_20181121134724248.jpg",
+                    beforeImgAlt: "[광고]ABC마트 일 년에 딱 한번 블랙이 된다! 블랙 ABC 데이 2018.11.22~12.16 일부품목, 일부브랜드 제외",
+                    firstViewImg01Src: "https://ssl.pstatic.net/tveta/libs/1218/1218041/1c0a24c3c81af5f71dde_20181121134713703.png",
+                    firstViewImg02Src: "https://ssl.pstatic.net/tveta/libs/1218/1218041/220c6a2aea877b000f83_20181121134716506.png",
+                    firstViewImg03Src: "https://ssl.pstatic.net/tveta/libs/1218/1218041/b2bc6ae6c6b143e58b19_20181121134718655.png",
+                    afterImgSrc: "https://ssl.pstatic.net/tveta/libs/1218/1218041/0a62c7a2483f07a632e5_20181121190922740.jpg",
+                    afterObjsrc: "https://ssl.pstatic.net/tveta/libs/1218/1218041/80e62d8278386eae02c3_20181121190929807.png",
+                    ballonText1: "풀버전 영상을",
+                    ballonText2: "확인하세요",
+                    afterImgAlt: "[광고]ABC마트 일 년에 딱 한번 블랙이 된다! 블랙 ABC 데이 2018.11.22~12.16 일부품목, 일부브랜드 제외",
+                    beforeImgLink: "https://nv.veta.naver.com/fxclick?eu=EU10000119&calp=-&ac=7756350&src=3637618&br=2795314&evtcd=P901&x_ti=995&tb=&oid=&sid1=&sid2=&rk=8c3ac39c39a1e58da8e106f5911a292d&eltts=veW0YbVDkwB%2F%2BncyXok1yw%3D%3D&lu=&brs=Y&",
+                    firstviewAfterLink: "https://nv.veta.naver.com/fxclick?eu=EU10000119&calp=-&ac=7756350&src=3637618&br=2795314&evtcd=P901&x_ti=995&tb=&oid=&sid1=&sid2=&rk=8c3ac39c39a1e58da8e106f5911a292d&eltts=veW0YbVDkwB%2F%2BncyXok1yw%3D%3D&lu=&brs=Y&"
+                },
+                iFreq: "1933959",
+                logData: {
+                    iconOverImp: "https://nv.veta.naver.com/fxclick?eu=EU10000119&calp=-&ac=7756350&src=3637618&br=2795315&evtcd=C1051&x_ti=995&tb=&oid=&sid1=&sid2=&rk=8c3ac39c39a1e58da8e106f5911a292d&eltts=veW0YbVDkwB%2F%2BncyXok1yw%3D%3D&lu=&brs=Y&"
+                }
+            },
+            expansionPlayer: {
+                creativeData: {
+                    expansionVideoSrc: "https://tvetamovie.pstatic.net/libs/1218/1218041/f61ff65b71ff146d0ccf_20181121155925624.mp4-pMAIN-v0-f68907-20181121155943654.mp4",
+                    expansionStillSrc: "https://ssl.pstatic.net/tveta/libs/1218/1218041/b852c033e210db8314d9_20181121145021834.jpg",
+                    expansionBgSrc: "https://ssl.pstatic.net/tveta/libs/1218/1218041/cfe2fe8e64a086aefeb0_20181121134936597.jpg",
+                    expansionBgAlt: "[광고]ABC마트 일 년에 딱 한번 블랙이 된다! 블랙 ABC 데이 2018.11.22~12.16 일부품목, 일부브랜드 제외",
+                    expansionBgLink: "https://nv.veta.naver.com/fxclick?eu=EU10000119&calp=-&ac=7756350&src=3637092&br=2795009&evtcd=C1034&x_ti=995&tb=&oid=&sid1=&sid2=&rk=8c3ac39c39a1e58da8e106f5911a292d&eltts=veW0YbVDkwB%2F%2BncyXok1yw%3D%3D&lu=&brs=Y&"
+                },
+                logData: {
+                    expansionImp: "https://nv.veta.naver.com/fxview?eu=EU10000119&calp=-&ac=7756350&src=3637092&evtcd=C1001&x_ti=995&tb=&oid=&sid1=&sid2=&rk=8c3ac39c39a1e58da8e106f5911a292d&eltts=veW0YbVDkwB%2F%2BncyXok1yw%3D%3D&brs=Y&&eid=V810&t=i"
+                }
+            },
+            noSupport: {
+                creativeData: {
+                    noSupportImgSrc: "https://ssl.pstatic.net/tveta/libs/1218/1218041/858ec7fa017b32989c97_20181121152729731.jpg",
+                    noSupportClick: "https://nv.veta.naver.com/fxclick?eu=EU10000119&calp=-&ac=7756350&src=3637093&br=2795010&evtcd=C1017&x_ti=995&tb=&oid=&sid1=&sid2=&rk=8c3ac39c39a1e58da8e106f5911a292d&eltts=veW0YbVDkwB%2F%2BncyXok1yw%3D%3D&lu=&brs=Y&",
+                    altText: "[광고]ABC마트 일 년에 딱 한번 블랙이 된다! 블랙 ABC 데이 2018.11.22~12.16 일부품목, 일부브랜드 제외"
+                },
+                logData: {
+                    noSupportImp: "https://nv.veta.naver.com/fxview?eu=EU10000119&calp=-&ac=7756350&src=3637093&evtcd=C1000&x_ti=995&tb=&oid=&sid1=&sid2=&rk=8c3ac39c39a1e58da8e106f5911a292d&eltts=veW0YbVDkwB%2F%2BncyXok1yw%3D%3D&brs=Y&&eid=V810&t=i"
+                }
+            }
+        };
+
+        info.adDiv = Da.$$("da_expwide");
+
+        var autoplay = new RollingBoardFirstView(info);
+        autoplay.initAd();
+    }
+</script>
+
+<div style="display: none;"></div></body></html>
