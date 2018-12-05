@@ -7,7 +7,7 @@ import org.jsoup.safety.Whitelist;
 
 import java.io.*;
 
-public class PreProcessing {
+public class PreProcessing_temp {
 	public static void main(String[] args) throws Exception {
 		PrintWriter out = new PrintWriter("filename.txt");
 		
@@ -19,10 +19,8 @@ public class PreProcessing {
 		
 		while ((inputLine = in.readLine()) != null)
 			input += inputLine;
-		
 		Document jsoupDoc = Jsoup.parse(input);
 		int count = Jsoup.parse(input).text().split(" ").length;
-		
 		String temp = jsoupDoc.text().replaceAll("\\.", "")
 				.replaceAll("\"", "")
 				.replaceAll(",", "")
@@ -30,9 +28,10 @@ public class PreProcessing {
 				.replaceAll("\\(", "")
 				.replaceAll("\\)", "")
 				.replaceAll(";", "")
+//				.replaceAll("\\[", "")
+//				.replaceAll("\\]", "")
 				.replaceAll("\\[(.*?)\\]", "");
 		String[] result = temp.split(" ");
-		
 		for (String word : result) {
 			out.println(word);
 		}
