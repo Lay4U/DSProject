@@ -42,45 +42,22 @@ public class PreProcessing {
 		System.out.println("total word count :" + count);
 		Connection connection = null;
 		Statement st = null;
-		doSql();
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		connection = DriverManager.getConnection(
+				"jdbc:mysql://localhost:3306/ds?characterEncoding=UTF-8&serverTimezone=UTC", "root", "kgu123");
+		st = connection.createStatement();
+
+		String sql;
+		for (String word : result) {
+			sql = "INSERT INTO CONTENT(word)" + " VALUE (\"" + word + "\");";
+			st.executeUpdate(sql);
+		}
+		System.out.println("finised insert value");
+		st.close();
+		connection.close();
 		in.close();
+		
 	}
 	
-	public static void doSql()
-	{
-		Connection connection = null;
-		Statement st = null;
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			connection = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/ds?characterEncoding=UTF-8&serverTimezone=UTC", "root", "kgu123");
-			st = connection.createStatement();
-
-			String sql;
-			for (String word : this.result) {
-				sql = "INSERT INTO CONTENT(word)" + " VALUE (\"" + word + "\");";
-				st.executeUpdate(sql);
-			}
-			System.out.println("finised insert value");
-			st.close();
-			connection.close();
-		} catch (SQLException se1) {
-			se1.printStackTrace();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		} finally {
-			try {
-				if (st != null)
-					st.close();
-			} catch (SQLException se2) {
-			}
-			try {
-				if (connection != null)
-					connection.close();
-			} catch (SQLException se) {
-				se.printStackTrace();
-			}
-		}
-	}
 	
 }
