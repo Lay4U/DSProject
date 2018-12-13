@@ -14,6 +14,7 @@ import java.io.*;
 
 public class PreProcessing {
 	public String[] result;
+
 	public static void main(String[] args) throws Exception {
 		PrintWriter out = new PrintWriter("filename.txt");
 
@@ -42,22 +43,36 @@ public class PreProcessing {
 		System.out.println("total word count :" + count);
 		Connection connection = null;
 		Statement st = null;
+		ResultSet rs = null;
+		
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		connection = DriverManager.getConnection(
 				"jdbc:mysql://localhost:3306/ds?characterEncoding=UTF-8&serverTimezone=UTC", "root", "kgu123");
 		st = connection.createStatement();
 
-		String sql;
-		for (String word : result) {
-			sql = "INSERT INTO CONTENT(word)" + " VALUE (\"" + word + "\");";
-			st.execute(sql);
-		}
-		System.out.println("finised insert value");
+//sql 삽입		
+//		String sql;
+//		for (String word : result) {
+//			sql = "INSERT INTO CONTENT(word)" + " VALUE (\"" + word + "\");";
+//			st.execute(sql);
+//		}
+		
+		
+//		System.out.println("finised insert value");
+//		String sql = "SELECT COUNT(word), word FROM content GROUP BY word ORDER BY word;";
+//		rs = st.executeQuery(sql);
+//		System.out.println(rs);
+		
+		int rowCnt = 0;
+        rs = st.executeQuery("SELECT COUNT(*) FROM content");
+        if(rs.next()) rowCnt = rs.getInt(1);
+        System.out.println("Total rows : " + rowCnt);
+
+
 		st.close();
 		connection.close();
 		in.close();
 		
 	}
-	
-	
+
 }
