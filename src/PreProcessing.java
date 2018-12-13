@@ -31,7 +31,7 @@ public class PreProcessing {
 
 		String temp = jsoupDoc.text().replaceAll("\\.", "").replaceAll("\"", "").replaceAll(",", "").replaceAll(":", "")
 				.replaceAll("\\(", "").replaceAll("\\)", "").replaceAll(";", "").replaceAll("\\[(.*?)\\]", "")
-				.replaceAll("®", "").replaceAll("-", "").replaceAll("","\b");
+				.replaceAll("®", "").replaceAll("-", "");
 		
 		 String[] result = temp.split(" ");
 
@@ -50,7 +50,7 @@ public class PreProcessing {
 		String sql;
 		for (String word : result) {
 			sql = "INSERT INTO CONTENT(word)" + " VALUE (\"" + word + "\");";
-			st.executeUpdate(sql);
+			st.execute(sql);
 		}
 		System.out.println("finised insert value");
 		st.close();
