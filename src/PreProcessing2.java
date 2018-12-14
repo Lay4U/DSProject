@@ -1,18 +1,17 @@
-import java.net.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Document.OutputSettings;
-import org.jsoup.safety.Whitelist;
 
-import java.io.*;
-
-public class PreProcessing {
+public class PreProcessing2 {
 	public String[] result;
 
 	public static void main(String[] args) throws Exception {
@@ -59,12 +58,26 @@ public class PreProcessing {
 //		rs = st.executeQuery(sql);
 //		System.out.println(rs);
 		
-		int rowCnt = 0;
-        rs = st.executeQuery("SELECT COUNT(*) FROM content");
-        if(rs.next()) rowCnt = rs.getInt(1);
-        System.out.println("Total counts : " + rowCnt);
-
-
+//		int rowCnt = 0;
+//        rs = st.executeQuery("SELECT COUNT(*) FROM content");
+//        if(rs.next()) rowCnt = rs.getInt(1);
+//        System.out.println("Total counts : " + rowCnt);
+		String sql = "SELECT COUNT(word), word FROM content GROUP BY word ORDER BY Count(word) DESC;";
+		rs = st.executeQuery(sql);
+		ArrayList<Integer> getSqlcnt = new ArrayList<>();
+		ArrayList<String> getSqlstr = new ArrayList<>();
+		while(rs.next()) 
+		{
+			System.out.println(rs.getInt(1)+"\t"+rs.getString(2));
+			getSqlcnt.add(rs.getInt(1));
+			getSqlstr.add(rs.getString(2));
+		}
+		
+		int sum=0;
+		for (Integer tmp : getSqlcnt) {
+			sum+=tmp;
+		}
+		System.out.println(sum);
 		st.close();
 		connection.close();
 		in.close();
