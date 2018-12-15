@@ -1,46 +1,43 @@
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DB {
-    public static void main(String[] args) {
-        PreProcessing pp = null;
-        
-        String[] result = pp.getResult();
-        Connection connection = null;
-        Statement st = null;
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/ds?characterEncoding=UTF-8&serverTimezone=UTC", "root", "kgu123");
-            st = connection.createStatement();
 
-            String sql;
-            for (String word : result) {
-                sql = "INSERT INTO CONTENT(word)" + " VALUE (\"" + word + "\");";
-                st.executeUpdate(sql);
-            }
-            System.out.println("finised insert value");
-            st.close();
-            connection.close();
-        } catch (SQLException se1) {
-            se1.printStackTrace();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        } finally {
-            try {
-                if (st != null)
-                    st.close();
-            } catch (SQLException se2) {
-            }
-            try {
-                if (connection != null)
-                    connection.close();
-            } catch (SQLException se) {
-                se.printStackTrace();
-            }
-        }
-    }
+	public ResultSet DoDB(String[] temp, String dbURL) throws ClassNotFoundException, SQLException {
+		String[] result = temp;
+		String dbUrl=dbURL;
+		// sql Ω√¿€
+		Connection connection = null;
+		Statement st = null;
+		ResultSet rs = null;
 
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		connection = DriverManager.getConnection(
+				dbURL, "root", "kgu123");
+		//"jdbc:mysql://localhost:3306/ds?characterEncoding=UTF-8&serverTimezone=UTC", "root", "kgu123"
+		// "jdbc:mysql://192.168.17.128:3306/ds2?&serverTimezone=UTC", "root",
+		// "kgu123");
+		// "jdbc:mysql://192.168.17.129:3306/ds2?&serverTimezone=UTC", "root",
+		// "kgu123");
+		st = connection.createStatement();
+		String sql;
+
+		// sql ª¿‘
+		sql = "DELETE FROM CONTENT";
+		st.execute(sql);
+
+		for (String word : result) {
+			sql = "INSERT INTO CONTENT(word)" + " VALUE (\"" + word + "\");";
+			st.execute(sql);
+		}
+		
+		sql = "SELECT COUNT(word), word FROM CONTENT GROUP BY word ORDER BY Count(word) DESC;";
+		rs = st.executeQuery(sql);
+		
+
+		return rs;
+	}
 }

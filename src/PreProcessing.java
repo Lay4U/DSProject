@@ -32,7 +32,7 @@ public class PreProcessing {
 
         String temp = jsoupDoc.text().replaceAll("\\.", "").replaceAll("\"", "").replaceAll(",", "").replaceAll(":", "")
                 .replaceAll("\\(", "").replaceAll("\\)", "").replaceAll(";", "").replaceAll("\\[(.*?)\\]", "")
-                .replaceAll("®", "").replaceAll("-", "");
+                .replaceAll("짰", "").replaceAll("-", "");
         
         
 
@@ -46,18 +46,6 @@ public class PreProcessing {
                 "jdbc:mysql://localhost:3306/ds?characterEncoding=UTF-8&serverTimezone=UTC", "root", "kgu123");
         st = connection.createStatement();
 
-//sql 삽입        
-//        String sql;
-//        for (String word : result) {
-//            sql = "INSERT INTO CONTENT(word)" + " VALUE (\"" + word + "\");";
-//            st.execute(sql);
-//        }
-        
-        
-//        System.out.println("finised insert value");
-//        String sql = "SELECT COUNT(word), word FROM content GROUP BY word ORDER BY word;";
-//        rs = st.executeQuery(sql);
-//        System.out.println(rs);
         
         int rowCnt = 0;
         rs = st.executeQuery("SELECT COUNT(*) FROM content");
@@ -72,3 +60,16 @@ public class PreProcessing {
     }
 
 }
+
+//sql �궫�엯        
+//String sql;
+//for (String word : result) {
+//  sql = "INSERT INTO CONTENT(word)" + " VALUE (\"" + word + "\");";
+//  st.execute(sql);
+//}
+
+
+//System.out.println("finised insert value");
+//String sql = "SELECT COUNT(word), word FROM content GROUP BY word ORDER BY word;";
+//rs = st.executeQuery(sql);
+//System.out.println(rs);
