@@ -1,15 +1,16 @@
 
-import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.stream.Stream;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -30,15 +31,17 @@ public class te extends JFrame {
 
 		// Layout 배치설정자
 		this.setLayout(new GridLayout(6, 2));
-		add(new JLabel("   !"));
+		add(new JLabel("   Dsitributed System"));
 
 		JPanel panel1 = new JPanel();
 		panel1.add(new JLabel("  url :"));
 		input_url_J = new JTextField(20);
+		input_url_J.setText("https://en.wikipedia.org/wiki/Distributed_computing");
+//		input_url_J.setText("https://www.naver.com");
 		panel1.add(input_url_J);
 
 		JPanel panel2 = new JPanel();
-		panel2.add(new JLabel("  number of db :"));
+		panel2.add(new JLabel("  number of db (1, 2, 4) :"));
 		input_dbnum_J = new JTextField(3);
 		panel2.add(input_dbnum_J);
 
@@ -62,6 +65,55 @@ public class te extends JFrame {
 		button2.addActionListener(new Listener(this));
 	}
 
+	public static void DisplayResult(ArrayList<Integer> getSqlcnt, ArrayList<String> getSqlstr) // constructor of the
+																								// DisplayGuiHelp object
+																								// that has the list
+	// passed to it on creation
+	{
+		
+	    JFrame f = new JFrame("Text Field View");
+	    JTextArea tf = new JTextArea(32, 10);
+	    ArrayList<String> result_t = new ArrayList<String>();
+		Stream.concat(getSqlcnt.stream(), getSqlcnt.stream()).forEachOrdered(str -> {
+		result_t.add(getSqlcnt + "\t" + getSqlstr);
+	});
+		String result = "";
+		for (String s : result_t) {
+			result += s + "\n";
+		}
+	    tf.setText(result);
+	    f.getContentPane().add(tf);
+	    f.pack();
+	    f.setVisible(true);
+//        final JFrame theFrame = new JFrame();
+//        theFrame.setTitle("Stack exchange help");
+//        theFrame.setSize(500, 500);
+//        theFrame.setLocation(550, 400);
+//
+//		JPanel mainPanel = new JPanel();
+//
+//		JTextArea theText = new JTextArea(5, 25); // create the text area
+////		Iterator<Integer> i1 = getSqlcnt.iterator();
+////		Iterator<String> i2 = getSqlstr.iterator();
+////		while (((Iterator<Integer>) getSqlcnt).hasNext() && ((Iterator<Integer>) getSqlstr).hasNext()) {
+////			theText.append(getSqlcnt + "\t" + getSqlstr);
+////		}
+//		Stream.concat(getSqlcnt.stream(), getSqlcnt.stream()).forEachOrdered(str -> {
+//			theText.append(getSqlcnt + "\t" + getSqlstr);
+//		});
+////        for(String cnt, str : getSqlcnt, getSqlstr)
+////        {
+////            theText.append(text + "\n"); //append the contents of the array list to the text area
+////
+////        }
+//		mainPanel.add(theText); // add the text area to the panel
+//
+//		theFrame.getContentPane().add(mainPanel); // add the panel to the frame
+//		theFrame.pack();
+//		theFrame.setVisible(true);
+
+	}
+
 	class Listener implements ActionListener {
 		JFrame frame;
 
@@ -71,22 +123,26 @@ public class te extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
+
 			// 버튼을 누르면 이쪽으로 제어가 이동
-			// System.out.println(arg0.getActionCommand());
+			System.out.println(arg0.getActionCommand());
 			if (arg0.getActionCommand() == "Submit") {
 				input_url = input_url_J.getText();
 				input_dbnum = input_dbnum_J.getText();
 				try {
 					DS ds = new DS(input_url, input_dbnum);
+
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
-			if(arg0.getActionCommand() == "Start!")
-			{
+			if (arg0.getActionCommand() == "Start!") {
+				System.out.println(arg0.getActionCommand());
 				try {
 					DS.doDS();
+					// JOptionPane.showMessageDialog(frame, "a");
+					// labelMessage.setText(message );
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -94,14 +150,24 @@ public class te extends JFrame {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
+
 			}
 			// 다이얼로그
-			// JOptionPane.showMessageDialog(frame, n + a);
+
 		}
 	}
 
 	public static void main(String[] args) {
 		new te();
+	}
+
+	public static void DisplayResult(int sum) {
+		// TODO Auto-generated method stub
+	    JFrame f = new JFrame("Text Field View");
+	    JTextField tf = new JTextField(32);
+	    tf.setText(String.valueOf(sum));
+	    f.getContentPane().add(tf);
+	    f.pack();
+	    f.setVisible(true);
 	}
 }

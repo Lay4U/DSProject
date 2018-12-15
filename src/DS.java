@@ -17,54 +17,50 @@ public class DS {
 	public static String[] result2;
 	public static String[] result3;
 	public static String[] result4;
-	
-	
+
 	private static ResultSet rs;
-	public static int resultSize,  dbcnt;
-	
+	public static int resultSize, dbcnt;
+
 	public DS(String input_url, String input_dbnum) throws IOException {
-	
-	String url_add = input_url;
-	int dbnum =  Integer.parseInt(input_dbnum);
-	
-	URL url = new URL(url_add);
-	BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
 
-	String inputLine = "";
-	String input = "";
+		String url_add = input_url;
+		int dbnum = Integer.parseInt(input_dbnum);
 
-	while ((inputLine = in.readLine()) != null)
-		input += inputLine;
+		URL url = new URL(url_add);
+		BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
 
-	Document jsoupDoc = Jsoup.parse(input);
-	int count = Jsoup.parse(input).text().split(" ").length;
+		String inputLine = "";
+		String input = "";
 
-	String temp = jsoupDoc.text().replaceAll("\\.", "").replaceAll("\"", "").replaceAll(",", "").replaceAll(":", "")
-			.replaceAll("\\(", "").replaceAll("\\)", "").replaceAll(";", "").replaceAll("\\[(.*?)\\]", "")
-			.replaceAll("짰", "").replaceAll("-", "");
-	result = temp.split(" ");
+		while ((inputLine = in.readLine()) != null)
+			input += inputLine;
 
-	resultSize = result.length;
-	
-	dbcnt = dbnum;
+		Document jsoupDoc = Jsoup.parse(input);
+		int count = Jsoup.parse(input).text().split(" ").length;
+
+		String temp = jsoupDoc.text().replaceAll("\\.", "").replaceAll("\"", "").replaceAll(",", "").replaceAll(":", "")
+				.replaceAll("\\(", "").replaceAll("\\)", "").replaceAll(";", "").replaceAll("\\[(.*?)\\]", "")
+				.replaceAll("짰", "").replaceAll("-", "");
+		result = temp.split(" ");
+
+		resultSize = result.length;
+
+		dbcnt = dbnum;
 	}
+
 	public static void main(String[] args) throws Exception {
 		new te();
 
-		
 		// ArrayList<String[]> setResult = new ArrayList<>();
-		
-
-		
 
 	}
-	public static void doDS() throws ClassNotFoundException, SQLException
-	{
+
+	public static void doDS() throws ClassNotFoundException, SQLException {
 		String[] result1 = new String[resultSize / dbcnt];
 		String[] result2 = new String[resultSize / dbcnt];
 		String[] result3 = new String[resultSize / dbcnt];
 		String[] result4 = new String[resultSize / dbcnt];
-		
+
 		ResultSet rs;
 
 		for (int i = 0; i < resultSize / dbcnt; i++) {
@@ -83,6 +79,7 @@ public class DS {
 
 		ArrayList<Integer> getSqlcnt = new ArrayList<>();
 		ArrayList<String> getSqlstr = new ArrayList<>();
+		ArrayList<String> getSqlresult = new ArrayList<>();
 		String dburl1 = "jdbc:mysql://localhost:3306/ds?&serverTimezone=UTC";
 		String dburl2 = "jdbc:mysql://192.168.17.128:3306/ds2?&serverTimezone=UTC";
 		String dburl3 = "jdbc:mysql://192.168.17.129:3306/ds2?&serverTimezone=UTC";
@@ -109,9 +106,15 @@ public class DS {
 		for (Integer tmp : getSqlcnt) {
 			sum += tmp;
 		}
+		te.DisplayResult(sum);
+//		getSqlcnt.addAll(getSqlstr);
+//		te.DisplayResult(getSqlcnt, getSqlstr);
+		// listToSend.add(getSqlcnt);
+
 		System.out.println(sum);
 		System.out.println("Finished");
 	}
+
 	public static void getsql(ArrayList<Integer> getSqlcnt, ArrayList<String> getSqlstr, String[] result, String dbUrl)
 			throws ClassNotFoundException, SQLException {
 		// sql 결과받기
@@ -120,8 +123,10 @@ public class DS {
 
 		while (rs.next()) {
 			System.out.println(rs.getInt(1) + "\t" + rs.getString(2));
+			// te.DisplayResult(rs.getInt(1),rs.getString(2));
 			getSqlcnt.add(rs.getInt(1));
 			getSqlstr.add(rs.getString(2));
+
 		}
 	}
 
