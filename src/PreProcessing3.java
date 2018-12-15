@@ -19,8 +19,6 @@ public class PreProcessing3 {
 	private static ResultSet rs;
 
 	public static void main(String[] args) throws Exception {
-		PrintWriter out = new PrintWriter("filename.txt");
-
 		URL url = new URL("https://en.wikipedia.org/wiki/Distributed_computing");
 		BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
 
@@ -39,10 +37,12 @@ public class PreProcessing3 {
 		String[] result = temp.split(" ");
 		
 		int resultSize=result.length;
-		int dbcnt=2;
+		int dbcnt=4;
 		//ArrayList<String[]> setResult = new ArrayList<>();
 		String[] result1 = new String[resultSize/dbcnt];
 		String[] result2 = new String[resultSize/dbcnt];
+		String[] result3 = new String[resultSize/dbcnt];
+		String[] result4 = new String[resultSize/dbcnt];
 		System.out.println("total word count :" + count);
 		ResultSet rs;
 
@@ -55,6 +55,12 @@ public class PreProcessing3 {
 		for (int i = 0; i < resultSize/dbcnt ; i++) {
 			result2[i] = result[i];
 		}
+		for (int i = 0; i < resultSize/dbcnt ; i++) {
+			result3[i] = result[i];
+		}
+		for (int i = 0; i < resultSize/dbcnt ; i++) {
+			result4[i] = result[i];
+		}
 
 		
 		ArrayList<Integer> getSqlcnt = new ArrayList<>();
@@ -62,15 +68,39 @@ public class PreProcessing3 {
 		String dburl1="jdbc:mysql://localhost:3306/ds?&serverTimezone=UTC";
 		String dburl2="jdbc:mysql://192.168.17.128:3306/ds2?&serverTimezone=UTC";
 		String dburl3="jdbc:mysql://192.168.17.129:3306/ds2?&serverTimezone=UTC";
-		getsql(getSqlcnt, getSqlstr, result1, dburl1);
-		getsql(getSqlcnt, getSqlstr, result2, dburl2);
-
+		String dburl4="jdbc:mysql://192.168.17.130:3306/ds2?&serverTimezone=UTC";
+		
+		
+		if(dbcnt==1)
+		{
+			System.out.println("1 of db connect");
+			getsql(getSqlcnt, getSqlstr, result1, dburl1);
+		}
+		else if(dbcnt==2)
+		{
+			System.out.println("2 of db connect");
+			getsql(getSqlcnt, getSqlstr, result1, dburl1);
+			getsql(getSqlcnt, getSqlstr, result2, dburl2);
+		}
+		else if(dbcnt==4)
+		{
+			System.out.println("4 of db connect");
+			getsql(getSqlcnt, getSqlstr, result1, dburl1);
+			getsql(getSqlcnt, getSqlstr, result2, dburl2);
+			getsql(getSqlcnt, getSqlstr, result3, dburl3);
+			getsql(getSqlcnt, getSqlstr, result4, dburl4);
+		}
+		else
+		{
+			System.out.println("error please check validation");
+		}
 
 		int sum = 0;
 		for (Integer tmp : getSqlcnt) {
 			sum += tmp;
 		}
 		System.out.println(sum);
+		System.out.println("Finished");
 
 		in.close();
 
