@@ -5,6 +5,7 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
@@ -13,6 +14,9 @@ import org.jsoup.nodes.Document;
 
 public class PreProcessing3 {
 	public String[] result;
+	public String[] result2;
+	public String[] result3;
+	private static ResultSet rs;
 
 	public static void main(String[] args) throws Exception {
 		PrintWriter out = new PrintWriter("filename.txt");
@@ -33,22 +37,34 @@ public class PreProcessing3 {
 				.replaceAll("\\(", "").replaceAll("\\)", "").replaceAll(";", "").replaceAll("\\[(.*?)\\]", "")
 				.replaceAll("짰", "").replaceAll("-", "");
 		String[] result = temp.split(" ");
+		
+		int resultSize=result.length;
+		int dbcnt=2;
+		//ArrayList<String[]> setResult = new ArrayList<>();
+		String[] result1 = new String[resultSize/dbcnt];
+		String[] result2 = new String[resultSize/dbcnt];
 		System.out.println("total word count :" + count);
 		ResultSet rs;
-		Statement st;
-
 
 		
-		//sql 결과받기
-		DB mydb = new DB();
-		rs = mydb.DoDB(result, "jdbc:mysql://localhost:3306/ds?characterEncoding=UTF-8&serverTimezone=UTC");
-		ArrayList<Integer> getSqlcnt = new ArrayList<>();
-		ArrayList<String> getSqlstr = new ArrayList<>();  
-		while (rs.next()) {
-			System.out.println(rs.getInt(1) + "\t" + rs.getString(2));
-			getSqlcnt.add(rs.getInt(1));
-			getSqlstr.add(rs.getString(2));
+
+		for (int i = 0; i < resultSize/dbcnt; i++) {
+			result1[i] = result[i];
 		}
+//		
+		for (int i = 0; i < resultSize/dbcnt ; i++) {
+			result2[i] = result[i];
+		}
+
+		
+		ArrayList<Integer> getSqlcnt = new ArrayList<>();
+		ArrayList<String> getSqlstr = new ArrayList<>(); 
+		String dburl1="jdbc:mysql://localhost:3306/ds?&serverTimezone=UTC";
+		String dburl2="jdbc:mysql://192.168.17.128:3306/ds2?&serverTimezone=UTC";
+		String dburl3="jdbc:mysql://192.168.17.129:3306/ds2?&serverTimezone=UTC";
+		getsql(getSqlcnt, getSqlstr, result1, dburl1);
+		getsql(getSqlcnt, getSqlstr, result2, dburl2);
+
 
 		int sum = 0;
 		for (Integer tmp : getSqlcnt) {
@@ -58,6 +74,19 @@ public class PreProcessing3 {
 
 		in.close();
 
+	}
+
+	public static void getsql(ArrayList<Integer> getSqlcnt, ArrayList<String> getSqlstr, String[] result, String dbUrl) throws ClassNotFoundException, SQLException
+	{
+		//sql 결과받기
+		DB mydb = new DB();
+		rs = mydb.DoDB(result, dbUrl);
+		
+		while (rs.next()) {
+			System.out.println(rs.getInt(1) + "\t" + rs.getString(2));
+			getSqlcnt.add(rs.getInt(1));
+			getSqlstr.add(rs.getString(2));
+		}
 	}
 
 }
