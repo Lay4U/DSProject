@@ -24,9 +24,9 @@ public class te extends JFrame {
 
 	public te() {
 		// new JFrame();생략됨 나자신이니까 쓸수 없음
-
+		this.setTitle("Distribute Computing System");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);// 프레임 완전하게 끄기
-		this.setSize(300, 200);
+		this.setSize(500, 300);
 		this.setVisible(true);
 
 		// Layout 배치설정자
@@ -124,9 +124,9 @@ public class te extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 
-			// 버튼을 누르면 이쪽으로 제어가 이동
+			
 			System.out.println(arg0.getActionCommand());
-			if (arg0.getActionCommand() == "Submit") {
+			if (arg0.getActionCommand() == "Submit") {	//입력받고 ds 생성
 				input_url = input_url_J.getText();
 				input_dbnum = input_dbnum_J.getText();
 				try {
@@ -138,7 +138,7 @@ public class te extends JFrame {
 				}
 			}
 			if (arg0.getActionCommand() == "Start!") {
-				System.out.println(arg0.getActionCommand());
+				System.out.println(arg0.getActionCommand());	//ds 실행
 				try {
 					DS.doDS();
 					// JOptionPane.showMessageDialog(frame, "a");
@@ -163,9 +163,9 @@ public class te extends JFrame {
 
 	public static void DisplayResult(int sum) {
 		// TODO Auto-generated method stub
-	    JFrame f = new JFrame("Text Field View");
+	    JFrame f = new JFrame("Result View");
 	    JTextField tf = new JTextField(32);
-	    tf.setText(String.valueOf(sum));
+	    tf.setText("Total number of word is : " +String.valueOf(sum));
 	    f.getContentPane().add(tf);
 	    f.pack();
 	    f.setVisible(true);

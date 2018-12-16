@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -25,22 +26,36 @@ public class DS {
 
 		String url_add = input_url;
 		int dbnum = Integer.parseInt(input_dbnum);
-
-		URL url = new URL(url_add);
-		BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
-
 		String inputLine = "";
 		String input = "";
+		
+		try {
+		    URL url =  new URL(url_add);
+		    URLConnection conn = url.openConnection();
+		    conn.connect();
+		    BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+			while ((inputLine = in.readLine()) != null)
+				input += inputLine;
+		} catch (MalformedURLException e) {
+		    // the URL is not in a valid form
+			System.out.println(e);
+		} catch (IOException e) {
+		    // the connection couldn't be established
+			System.out.println(e);
+		}
 
-		while ((inputLine = in.readLine()) != null)
-			input += inputLine;
+		
+
+
+
+
 
 		Document jsoupDoc = Jsoup.parse(input);
 		int count = Jsoup.parse(input).text().split(" ").length;
 
 		String temp = jsoupDoc.text().replaceAll("\\.", "").replaceAll("\"", "").replaceAll(",", "").replaceAll(":", "")
 				.replaceAll("\\(", "").replaceAll("\\)", "").replaceAll(";", "").replaceAll("\\[(.*?)\\]", "")
-				.replaceAll("짰", "").replaceAll("-", "");
+				.replaceAll("®", "").replaceAll("-", "");
 		result = temp.split(" ");
 
 		resultSize = result.length;
