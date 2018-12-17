@@ -177,14 +177,17 @@ public class te extends JFrame {
 	    
 	    l.setText("실행 시간 : " + time + " second") ;
 	    tf.setText("단어의 총 개수 : " +String.valueOf(sum) );	
-	    
+
 //	    Iterator<String> iter = tree.keySet().iterator();			        
+	    Iterator<String> iter = getSqlstr.iterator();
+	    Iterator<Integer> iter2 = getSqlcnt.iterator();
 	    ad += "<html> 단어&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;횟수<br/>";
-	    getSqlcnt.addAll(getSqlstr);
-	    while(iter.hasNext()){
-			String key = iter.next();
-			ad += key + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + tree.get(key) + "<br/>";		    
-		}
+	    while(iter.hasNext()) {
+	    	String str = iter.next();
+	    	String cnt = iter2.next().toString();
+	    	ad += str +"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+cnt+"<br/>";	
+	    }
+
 	    ad += "</html>";
 	    l2.setText(ad);
 	    JScrollPane scroll = new JScrollPane();
