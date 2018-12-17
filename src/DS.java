@@ -7,7 +7,10 @@ import java.net.URLConnection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -112,22 +115,86 @@ public class DS {
 		String dburl3 = "jdbc:mysql://192.168.17.129:3306/ds2?&serverTimezone=UTC";
 		String dburl4 = "jdbc:mysql://192.168.17.130:3306/ds2?&serverTimezone=UTC";
 
-		if (dbcnt == 1) {
-			System.out.println("1 of db connect");
-			getsql(getSqlcnt, getSqlstr, result1, dburl1);
-		} else if (dbcnt == 2) {
-			System.out.println("2 of db connect");
-			getsql(getSqlcnt, getSqlstr, result1, dburl1);
-			getsql(getSqlcnt, getSqlstr, result2, dburl2);
-		} else if (dbcnt == 4) {
-			System.out.println("4 of db connect");
-			getsql(getSqlcnt, getSqlstr, result1, dburl1);
-			getsql(getSqlcnt, getSqlstr, result2, dburl2);
-			getsql(getSqlcnt, getSqlstr, result3, dburl3);
-			getsql(getSqlcnt, getSqlstr, result4, dburl4);
-		} else {
-			System.out.println("error please check validation");
-		}
+		
+		 ExecutorService executorService = Executors.newFixedThreadPool(
+	                Runtime.getRuntime().availableProcessors()
+	        );
+	        
+	        System.out.println("[작업 처리 요청]");
+	        
+	        Runnable run = new Runnable() {
+	            @Override
+	            public void run() {
+	        		if (dbcnt == 1) {
+	        			System.out.println("1 of db connect");
+	        			try {
+							getsql(getSqlcnt, getSqlstr, result1, dburl1);
+						} catch (ClassNotFoundException | SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+	        		} else if (dbcnt == 2) {
+	        			System.out.println("2 of db connect");
+	        			try {
+							getsql(getSqlcnt, getSqlstr, result1, dburl1);
+						} catch (ClassNotFoundException | SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+	        			try {
+							getsql(getSqlcnt, getSqlstr, result2, dburl2);
+						} catch (ClassNotFoundException | SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+	        		} else if (dbcnt == 4) {
+	        			System.out.println("4 of db connect");
+	        			try {
+							getsql(getSqlcnt, getSqlstr, result1, dburl1);
+						} catch (ClassNotFoundException | SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+	        			try {
+							getsql(getSqlcnt, getSqlstr, result2, dburl2);
+						} catch (ClassNotFoundException | SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+	        			try {
+							getsql(getSqlcnt, getSqlstr, result3, dburl3);
+						} catch (ClassNotFoundException | SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+	        			try {
+							getsql(getSqlcnt, getSqlstr, result4, dburl4);
+						} catch (ClassNotFoundException | SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+	        		} else {
+	        			System.out.println("error please check validation");
+	        		}
+	            }
+	        };
+	        
+	        Future future = executorService.submit(run);
+	        
+	        try {
+	            future.get();
+	            System.out.println("[작업 처리 완료]");
+	        } catch (InterruptedException e) {
+	            e.printStackTrace();
+	        } catch (ExecutionException e) {
+	            e.printStackTrace();
+	        }
+	        executorService.shutdown();
+	    
+	
+
+		
+		
 		end = System.nanoTime();
 
 		DB mydb = new DB();
