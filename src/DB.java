@@ -9,7 +9,7 @@ public class DB {
 	public ResultSet DoDB(String[] temp, String dbURL) throws ClassNotFoundException, SQLException {
 		String[] result = temp;
 		String dbUrl=dbURL;
-		// sql ì¤€ë¹„
+		// sql ½ÃÀÛ
 		Connection connection = null;
 		Statement st = null;
 		ResultSet rs = null;
@@ -25,7 +25,7 @@ public class DB {
 		st = connection.createStatement();
 		String sql;
 
-		// sql ì‹¤í–‰
+		// sql »ðÀÔ
 		sql = "DELETE FROM CONTENT";
 		st.execute(sql);
 
