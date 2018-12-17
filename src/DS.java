@@ -21,8 +21,8 @@ public class DS {
 
 	private static ResultSet rs;
 	public static int resultSize, dbcnt;
-	
-	static long start,end;
+
+	static long start, end;
 	static double time;
 
 	public DS(String input_url, String input_dbnum) throws IOException {
@@ -31,29 +31,26 @@ public class DS {
 		int dbnum = Integer.parseInt(input_dbnum);
 		String inputLine = "";
 		String input = "";
-		
+
 		try {
-		    URL url =  new URL(url_add);
-		    URLConnection conn = url.openConnection();
-		    conn.connect();
-		    BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+			URL url = new URL(url_add);
+			URLConnection conn = url.openConnection();
+			conn.connect();
+			BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
 			while ((inputLine = in.readLine()) != null)
 				input += inputLine;
 		} catch (MalformedURLException e) {
-		    // the URL is not in a valid form
+			// the URL is not in a valid form
 			System.out.println(e);
 		} catch (IOException e) {
-		    // the connection couldn't be established
+			// the connection couldn't be established
 			System.out.println(e);
 		}
 
-
 		Document jsoupDoc = Jsoup.parse(input);
-		int count = Jsoup.parse(input).text().split(" ").length;
-
 		String temp = jsoupDoc.text().replaceAll("\\.", "").replaceAll("\"", "").replaceAll(",", "").replaceAll(":", "")
 				.replaceAll("\\(", "").replaceAll("\\)", "").replaceAll(";", "").replaceAll("\\[(.*?)\\]", "")
-				.replaceAll("®", "").replaceAll("-", "");
+				.replaceAll("®", "").replaceAll("-", "").toLowerCase();
 		result = temp.split(" ");
 
 		resultSize = result.length;
@@ -76,19 +73,35 @@ public class DS {
 		String[] result4 = new String[resultSize / dbcnt];
 
 		ResultSet rs;
+		int divide = resultSize / dbcnt;
+		int dist_size = (resultSize / dbcnt);
 
-		for (int i = 0; i < resultSize / dbcnt; i++) {
-			result1[i] = result[i];
+		if (dbcnt == 1) {
+			for (int i = 0; i < divide; i++) {
+				result1[i] = result[i];
+			}
 		}
-//		
-		for (int i = 0; i < resultSize / dbcnt; i++) {
-			result2[i] = result[i];
+		if (dbcnt == 2) {
+			for (int i = 0; i < divide; i++) {
+				result1[i] = result[i];
+			}
+			for (int i = 0; i < divide; i++) {
+				result2[i] = result[i + divide * 1];
+			}
 		}
-		for (int i = 0; i < resultSize / dbcnt; i++) {
-			result3[i] = result[i];
-		}
-		for (int i = 0; i < resultSize / dbcnt; i++) {
-			result4[i] = result[i];
+		if (dbcnt == 4) {
+			for (int i = 0; i < divide; i++) {
+				result1[i] = result[i];
+			}
+			for (int i = 0; i < divide; i++) {
+				result2[i] = result[i + divide * 1];
+			}
+			for (int i = 0; i < divide; i++) {
+				result3[i] = result[i + divide * 2];
+			}
+			for (int i = 0; i < divide; i++) {
+				result4[i] = result[i + divide * 3];
+			}
 		}
 
 		ArrayList<Integer> getSqlcnt = new ArrayList<>();
@@ -116,13 +129,27 @@ public class DS {
 			System.out.println("error please check validation");
 		}
 		end = System.nanoTime();
-		
+
+		DB mydb = new DB();
+		rs = mydb.DoResult(getSqlcnt, getSqlstr);
+//		ArrayList<String> getSqlstr_result = new ArrayList<>();
+//		ArrayList<Integer> getSqlcnt_result = new ArrayList<>();
+		getSqlcnt.clear();
+		getSqlstr.clear();
+
+		while (rs.next()) {
+			System.out.println(rs.getInt(1) + "\t" + rs.getString(2));
+			// te.DisplayResult(rs.getInt(1),rs.getString(2));
+			getSqlcnt.add(rs.getInt(1));
+			getSqlstr.add(rs.getString(2));
+		}
+
 		int sum = 0;
 		for (Integer tmp : getSqlcnt) {
 			sum += tmp;
 		}
-		
-		te.DisplayResult(sum, (end-start)/1000000000.0, getSqlcnt, getSqlstr);
+
+		te.DisplayResult(sum, (end - start) / 1000000000.0, getSqlcnt, getSqlstr);
 //		getSqlcnt.addAll(getSqlstr);
 //		te.DisplayResult(getSqlcnt, getSqlstr);
 		// listToSend.add(getSqlcnt);
