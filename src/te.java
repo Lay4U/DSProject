@@ -1,4 +1,5 @@
 
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -6,12 +7,14 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -161,12 +164,40 @@ public class te extends JFrame {
 		new te();
 	}
 
-	public static void DisplayResult(int sum) {
+	public static void DisplayResult(int sum, double time,ArrayList<Integer> getSqlcnt, ArrayList<String> getSqlstr) {
 		// TODO Auto-generated method stub
-	    JFrame f = new JFrame("Result View");
-	    JTextField tf = new JTextField(32);
-	    tf.setText("Total number of word is : " +String.valueOf(sum));
+		String ad = "";
+	    JFrame f = new JFrame("Result View");	  
+	    GridLayout layout = new GridLayout(3,1);	    
+	    f.setLayout(layout);
+	    JLabel tf = new JLabel();
+	    JLabel l = new JLabel();
+	    JLabel l2 = new JLabel();
+	    f.setPreferredSize(new Dimension(500,500));
+	    
+	    l.setText("실행 시간 : " + time + " second") ;
+	    tf.setText("단어의 총 개수 : " +String.valueOf(sum) );	
+	    
+//	    Iterator<String> iter = tree.keySet().iterator();			        
+	    ad += "<html> 단어&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;횟수<br/>";
+	    getSqlcnt.addAll(getSqlstr);
+	    while(iter.hasNext()){
+			String key = iter.next();
+			ad += key + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + tree.get(key) + "<br/>";		    
+		}
+	    ad += "</html>";
+	    l2.setText(ad);
+	    JScrollPane scroll = new JScrollPane();
+	    scroll.setPreferredSize(new Dimension(500,600));
+	    scroll.setViewportView(l2);
+	    tf.setPreferredSize(new Dimension(500,50));
+	    l.setPreferredSize(new Dimension(500,50));
+	   
 	    f.getContentPane().add(tf);
+	    f.getContentPane().add(l);
+	    f.getContentPane().add(scroll);
+	    
+	    //f.add(l2);
 	    f.pack();
 	    f.setVisible(true);
 	}

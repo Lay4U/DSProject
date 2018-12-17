@@ -21,6 +21,9 @@ public class DS {
 
 	private static ResultSet rs;
 	public static int resultSize, dbcnt;
+	
+	static long start,end;
+	static double time;
 
 	public DS(String input_url, String input_dbnum) throws IOException {
 
@@ -44,11 +47,6 @@ public class DS {
 			System.out.println(e);
 		}
 
-		
-
-
-
-
 
 		Document jsoupDoc = Jsoup.parse(input);
 		int count = Jsoup.parse(input).text().split(" ").length;
@@ -71,6 +69,7 @@ public class DS {
 	}
 
 	public static void doDS() throws ClassNotFoundException, SQLException {
+		start = System.nanoTime();
 		String[] result1 = new String[resultSize / dbcnt];
 		String[] result2 = new String[resultSize / dbcnt];
 		String[] result3 = new String[resultSize / dbcnt];
@@ -116,12 +115,14 @@ public class DS {
 		} else {
 			System.out.println("error please check validation");
 		}
-
+		end = System.nanoTime();
+		
 		int sum = 0;
 		for (Integer tmp : getSqlcnt) {
 			sum += tmp;
 		}
-		te.DisplayResult(sum);
+		
+		te.DisplayResult(sum, (end-start)/1000000000.0, getSqlcnt, getSqlstr);
 //		getSqlcnt.addAll(getSqlstr);
 //		te.DisplayResult(getSqlcnt, getSqlstr);
 		// listToSend.add(getSqlcnt);
